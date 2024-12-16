@@ -1,5 +1,7 @@
 # clog - Go package for Canonical Logging
 
+[![GoDoc](https://godoc.org/github.com/jwilder/clog?status.svg)](https://godoc.org/github.com/jwilder/clog)
+
 clog provides a simple way to support canonical logging in Go applications for easily
 constructing wide events.  Wide events, also called canonical logs, are
 a way to log structured data that can be easily queried and analyzed.  This package
