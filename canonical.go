@@ -18,7 +18,7 @@ import (
 //
 // A canonical log is a JSON object that contains a set of key-value pairs.  The keys
 // are strings that are dot-separated.  The values are strings, integers, or floats.  The
-// keys are case-insensitive.  The values are case-sensitive. The logging context is propogated through
+// keys are case-insensitive.  The values are case-sensitive. The logging context is propagated through
 // a context.Context so that different parts of the application can add to the same logging context.
 // At the end of the unit of work, the logging context can be marshaled to JSON and logged by the application.
 //
@@ -45,12 +45,12 @@ const (
 )
 
 type canonical struct {
-	values *orderedmap.OrderedMap[string, any]
+	values *orderedmap.OrderedMap[string, any] //nolint:typecheck
 }
 
-func newCanaonical() *canonical {
+func newCanonical() *canonical {
 	return &canonical{
-		values: orderedmap.New[string, any](),
+		values: orderedmap.New[string, any](), //nolint:typecheck
 	}
 }
 
@@ -59,7 +59,7 @@ func newCanaonical() *canonical {
 func Init(ctx context.Context) context.Context {
 	v := ctx.Value(contextKey)
 	if v == nil {
-		ctx = context.WithValue(ctx, contextKey, newCanaonical())
+		ctx = context.WithValue(ctx, contextKey, newCanonical())
 	}
 	return ctx
 }
@@ -123,7 +123,7 @@ func (c *canonical) setFloat64(key string, value float64) {
 	c.set(c.normalizeKey(key), c.values, value)
 }
 
-func (c *canonical) set(parts []string, state *orderedmap.OrderedMap[string, any], value any) {
+func (c *canonical) set(parts []string, state *orderedmap.OrderedMap[string, any], value any) { //nolint:typecheck
 	if len(parts) == 1 {
 		state.Set(parts[0], value)
 		return
@@ -131,7 +131,7 @@ func (c *canonical) set(parts []string, state *orderedmap.OrderedMap[string, any
 
 	val, ok := state.Get(parts[0])
 	if !ok {
-		val = orderedmap.New[string, any]()
+		val = orderedmap.New[string, any]() //nolint:typecheck
 		state.Set(parts[0], val)
 	}
 	c.set(parts[1:], val.(*orderedmap.OrderedMap[string, any]), value)
@@ -141,7 +141,7 @@ func (c *canonical) addInt(key string, value int) {
 	c.add(c.normalizeKey(key), c.values, value)
 }
 
-func (c *canonical) add(parts []string, state *orderedmap.OrderedMap[string, any], value int) {
+func (c *canonical) add(parts []string, state *orderedmap.OrderedMap[string, any], value int) { //nolint:typecheck
 	if len(parts) == 1 {
 		val, ok := state.Get(parts[0])
 		if !ok {

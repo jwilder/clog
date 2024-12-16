@@ -12,7 +12,7 @@ func TestCanonicalLogger_ServeHTTP(t *testing.T) {
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-Length", "2")
-		w.Write([]byte("OK"))
+		_, _ = w.Write([]byte("OK"))
 	})
 	logFn := func(log string) {
 		require.JSONEq(t, `{"http":{"request":{"method":"GET","path":"/test","body_bytes":0},"response":{"duration_ms":0,"body_bytes":2,"status_code":200}}}`, log)
@@ -42,7 +42,7 @@ func TestCanonicalLogger_ServeHTTP_InvalidContentLength(t *testing.T) {
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Length", "invalid")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("OK"))
+		_, _ = w.Write([]byte("OK"))
 	})
 	logFn := func(log string) {
 		require.JSONEq(t, `{"http":{"request":{"method":"GET","path":"/test","body_bytes":0},"response":{"duration_ms":0,"body_bytes":0,"status_code":200}}}`, log)
